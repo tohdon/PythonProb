@@ -1,0 +1,45 @@
+
+
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+x_data = np.linspace(0.0,10.0,1000000)
+noise = np.random.randn(len(x_data))
+
+y_data = (0.5* x_data) + 5+ noise
+
+my_data = pd.concat([pd.DataFrame(data=x_data,columns=['XData']),pd.DataFrame(data=y_data,columns=['Y'])], axis=1)
+
+print(my_data.head())
+
+batch_size = 8
+
+m = tf.Variable(0.5)
+b = tf.Variable(1.0)
+#xph = tf.constant(batch_size, dtype= tf.float32)
+#yph = tf.constant(batch_size, dtype= tf.float32)
+xph = tf.compat.v1.placeholder(tf.float32, [batch_size])
+yph = tf.compat.v1.placeholder(tf.float32, [batch_size])
+
+with tf.compat.v1.Session() as sess:
+   
+    y_model = m*xph + b
+    err = tf.reduce_sum(tf.square(yph-y_model))
+    opt = tf.compat.v1.train.GradientDescentOptimizer(learning_rate=0.001)
+    train = opt.minimize(err)
+    init = tf.compat.v1.global_variables_initializer()
+    sess.run(init)
+    batches = 1000
+    for i in range(batches):
+        rand_int = np.random.randint(len(x_data), size = batch_size)
+        #print(str(rand_int))
+        feed = {xph: x_data[rand_int], yph:y_data[rand_int]}
+        #print(feed)
+        sess.run(train,feed_dict=feed)
+    model_m, model_b = sess.run([m,b])
+    print("model_m : " + str(model_m))
+    print("model_b : " + str(model_b))
+    y_hat = x_data * model_m + model_b
+    my_data.sample(n=250).plot(kind='scatter',x='XData',y='Y')
+    plt.plot(x_data,y_hat,'r')
