@@ -7,6 +7,10 @@ Created on Sun Oct 17 20:18:11 2021
 import pandas as pd
 import numpy as np
 from sklearn import tree 
+import matplotlib.pyplot as plt
+from dtreeviz.trees import *
+from sklearn.model_selection import cross_val_score
+
 d = pd.read_csv(r'C:\software\python\student\student-por.csv', sep=';')
 print(len(d))
 
