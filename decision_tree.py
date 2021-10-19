@@ -77,3 +77,29 @@ viz = dtreeviz(t,
                title="Decision Tree - Student Result data set")
 viz.save(r'D:\student.svg') # suffix determines the generated image format
 viz.view()             # pop up window to display image
+wtscore = t.score(d_test_att, d_test_pass)
+
+print("tscore:" + str(wtscore))
+
+scores = cross_val_score(t, d_att, d_pass, cv=5)
+print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std()*2 ))
+
+for max_depth in range(1,30):
+    t = tree.DecisionTreeClassifier(criterion= "entropy", max_depth=max_depth)
+    scores = cross_val_score(t, d_att, d_pass, cv=5)
+    print("Max Depth: %d Accuracy: %0.2f (+/- %0.2f)" % (max_depth, scores.mean(), scores.std()*2 ))
+
+depth_acc = np.empty((19,3), float)
+i = 0
+for max_depth in range(1,20):
+    t = tree.DecisionTreeClassifier(criterion= "entropy", max_depth=max_depth)
+    scores = cross_val_score(t, d_att, d_pass, cv=5)
+    depth_acc[i,0] = max_depth
+    depth_acc[i,1] = scores.mean()
+    depth_acc[i,2] = scores.std() *2
+    i +=1
+    
+fig,ax = plt.subplots()
+
+ax.errorbar(depth_acc[:,0],depth_acc[:,1],yerr=depth_acc[:,2])    
+plt.show()
