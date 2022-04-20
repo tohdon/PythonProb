@@ -15,12 +15,12 @@ def writeWave(fname, data):
     sampleWidth = 2
     frameRate = 44100
     nFrames = 44100
-    file.setparams((nChannels, smapleWidth, frameRate, nFrames, 'NONE', 'noncompressed'))
+    file.setparams((nChannels, sampleWidth, frameRate, nFrames, 'NONE', 'noncompressed'))
     file.writeframes(data)
     file.close()
 
 def generateNote(freq):
-    nSmples = 44100
+    nSamples = 44100
     sampleRate = 44100
     N = int(sampleRate/freq)
     buf = deque([random.random() - 0.5 for i in range(N)])
@@ -61,7 +61,7 @@ def main():
     parser.add_argument('--play', action='store_true', required=False)
     parser.add_argument('--piano', action='store_true', required=False)
     args = parser.parse_args()
-    if args_display:
+    if args.display:
         gShowPlt = True
         plt.ion() 
     nplayer = NotePlayer()
@@ -88,7 +88,6 @@ def main():
                 exit()
     if args.piano:
         while True:
-            try:
                 for event in pygame.event.get():
                     if (event.type == pygame.KEYUP):
                         print("key pressed")
