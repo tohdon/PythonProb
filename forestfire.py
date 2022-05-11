@@ -3,9 +3,9 @@ import random, time, bext
 
 WIDTH = 79
 HEIGHT = 22
-TREE = '-'
+TREE = '^'
 FIRE = '*'
-EMPTY = ''
+EMPTY = ' '
 INITIAL_TREE_DENSITY = 0.2
 GROW_CHANCE = 0.01
 FIRE_CHANCE = 0.01
